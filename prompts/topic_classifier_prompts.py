@@ -1,7 +1,13 @@
 from langchain_core.example_selectors import SemanticSimilarityExampleSelector
-from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
 from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
+from langchain_openai import OpenAIEmbeddings
+from langchain_pinecone import PineconeVectorStore
+from pinecone import Pinecone, ServerlessSpec
+from langchain_huggingface import HuggingFaceEmbeddings
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 topic_data = [
 
@@ -133,11 +139,44 @@ topic_data = [
 
 ]
 
-embeddings = OpenAIEmbeddings()
+def fallback_embeddings():
 
-vectorstore = Chroma.from_texts(
+    try:
+
+        embeddings = OpenAIEmbeddings(dimensions=1024)
+
+    except:
+
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", dimensions=1024)
+
+    return embeddings
+
+embeddings = fallback_embeddings()
+
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+
+index_name = "banking-guardrails"
+
+if index_name not in pc.list_indexes().names():
+    pc.create_index(
+        name=index_name,
+        dimension=1024,
+        metric="cosine",
+        spec=ServerlessSpec(
+            cloud="aws",
+            region="us-east-1"
+        )
+    )
+
+index = pc.Index(index_name)
+
+vectorstore = PineconeVectorStore(
+    index=index,
+    embedding=embeddings
+)
+
+vectorstore.add_texts(
     texts=[item["query"] for item in topic_data],
-    embedding=embeddings,
     metadatas=topic_data
 )
 

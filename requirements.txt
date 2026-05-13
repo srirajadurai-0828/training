@@ -15,3 +15,5 @@ langsmith[openai-agetns]
 langchain-chroma
 anthropic
 langchain-anthropic
+langchain-pinecone
+pinecone

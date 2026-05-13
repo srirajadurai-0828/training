@@ -1,0 +1,50 @@
+[
+    {
+        "timestamp": "2026-05-13T23:31:16.241101",
+        "session_id": "be4501be",
+        "query": "Hello",
+        "type": "greeting",
+        "guardrail": false,
+        "latency_ms": 1696.34,
+        "chain_metadata": {
+            "attack_check": null,
+            "off_topic_check": null,
+            "pii_check": null,
+            "greeting_check": {
+                "query": "Hello",
+                "label": "Greeting",
+                "confidence": "High"
+            }
+        },
+        "tool_outputs": [],
+        "response": "Hello! Welcome to our banking service. How can I assist you today?"
+    },
+    {
+        "timestamp": "2026-05-13T23:31:43.684017",
+        "session_id": "be4501be",
+        "query": "What is EMI",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 5791.47,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "What is EMI",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "What is EMI",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "What is EMI",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "EMI stands for Equated Monthly Installment. It is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. EMIs are used to pay off both interest and principal each month so that over a specified number of years, the loan is paid off in full. EMIs are commonly used for loans such as home loans, personal loans, and car loans. The key benefit of an EMI is that it allows borrowers to budget their expenses and manage their finances more effectively by spreading the cost of the loan over a period of time."
+    }
+]
