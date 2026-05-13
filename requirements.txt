@@ -1,0 +1,17 @@
+fastapi[standard]
+uvicorn
+streamlit
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+openai
+python-dotenv
+pydantic
+tenacity
+pytest
+httpx
+langsmith[openai-agetns]
+langchain-chroma
+anthropic
+langchain-anthropic

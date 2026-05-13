@@ -1,0 +1,86 @@
+[
+    {
+        "timestamp": "2026-05-13T22:32:26.583634",
+        "session_id": "f3fe98d2",
+        "query": "What documents do I need for a loan?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 8504.29,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "For a loan at Horizon Bank, you typically need the following documents:\n\n1. **Identity Proof**: Aadhar Card, Passport, Voter ID, or Driving License.\n2. **Address Proof**: Utility bills, Passport, Aadhar Card, or Rental Agreement.\n3. **Income Proof**: Salary slips for the last 3 months, Form 16, or Income Tax Returns.\n4. **Bank Statements**: Bank statements for the last 6 months.\n5. **Photographs**: Recent passport-sized photographs.\n6. **Loan Application Form**: Duly filled and signed application form.\n7. **Additional Documents**: Depending on the type of loan, additional documents may be required, such as property documents for a home loan or business financials for a business loan.\n\nIt's always a good idea to check with the bank directly or visit our website at [www.horizonbank.com](http://www.horizonbank.com) for the most accurate and detailed information."
+    },
+    {
+        "timestamp": "2026-05-13T22:32:50.960868",
+        "session_id": "f3fe98d2",
+        "query": "Difference between FD and RD?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 8328.29,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "Difference between FD and RD?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "Difference between FD and RD?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "Difference between FD and RD?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "The key differences between a Fixed Deposit (FD) and a Recurring Deposit (RD) at Horizon Bank are as follows:\n\n1. **Investment Amount**:\n   - **FD**: A lump sum amount is deposited at once.\n   - **RD**: Small amounts are deposited at regular intervals (monthly).\n\n2. **Tenure**:\n   - **FD**: Ranges from 7 days to 10 years.\n   - **RD**: Typically ranges from 6 months to 10 years.\n\n3. **Interest Rates**:\n   - **FD**: Interest rates vary between 6.5% to 7.2% p.a., depending on the tenure.\n   - **RD**: Interest rates range from 6.0% to 7.0% p.a.\n\n4. **Interest Calculation**:\n   - **FD**: Interest is calculated on the entire deposit amount for the tenure.\n   - **RD**: Interest is calculated on the accumulated balance, which grows with each deposit.\n\n5. **Payout**:\n   - **FD**: Interest can be paid out at regular intervals or at maturity, along with the principal.\n   - **RD**: Interest is paid out along with the principal at maturity.\n\n6. **Purpose**:\n   - **FD**: Suitable for those with a lump sum amount to invest.\n   - **RD**: Ideal for those who wish to save small amounts regularly.\n\nBoth FD and RD are secure investment options, offering guaranteed returns. The choice between them depends on your financial goals and cash flow preferences."
+    },
+    {
+        "timestamp": "2026-05-13T22:33:26.827762",
+        "session_id": "f3fe98d2",
+        "query": "Summarize the chat",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 10707.05,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "Summarize the chat",
+                "label": "Safe",
+                "confidence": "Medium"
+            },
+            "off_topic_check": {
+                "query": "Summarize the chat",
+                "label": "Off-Topic",
+                "confidence": "Medium"
+            },
+            "pii_check": {
+                "query": "Summarize the chat",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "In this chat session, you inquired about the documents required for a loan at Horizon Bank and the differences between a Fixed Deposit (FD) and a Recurring Deposit (RD). \n\n1. **Loan Documents**: You were informed about the necessary documents, including identity proof, address proof, income proof, bank statements, photographs, and a filled loan application form.\n\n2. **FD vs. RD**: The differences between FD and RD were explained, highlighting aspects like investment amount, tenure, interest rates, interest calculation, payout, and purpose.\n\nIf you have any more questions or need further assistance, feel free to ask!"
+    }
+]
