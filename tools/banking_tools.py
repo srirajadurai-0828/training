@@ -3,6 +3,7 @@ from langchain_core.tools import tool
 from tools.intent_classifier_router import detect_intent
 from tools.sentiment_analyzer import analyze_sentiment
 from tools.complaint_triage import triage_complaint
+from rag.hm25_rag import hm25_retriever_tool
 
 
 @tool
@@ -49,4 +50,17 @@ def complaint_triage_tool(query: str) -> str:
         f"Escalation Required: {d['escalation_required']} | "
         f"SLA: {d['sla_hours']}h | "
         f"Reason: {d['reason']}"
+    )
+
+
+def hm25_rag_tool(query: str) -> str:
+    """
+    Retrieves information from the HM25 knowledge base using the given query.
+    Use this whenever the customer asks about HM25 or related topics.
+    """
+    result = hm25_retriever_tool(query)
+    d = result.model_dump()
+    return (
+        f"Query: {d['query']} | "
+        f"Response: {d['response']}"
     )

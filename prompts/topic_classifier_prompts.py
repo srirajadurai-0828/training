@@ -139,19 +139,8 @@ topic_data = [
 
 ]
 
-def fallback_embeddings():
 
-    try:
-
-        embeddings = OpenAIEmbeddings(dimensions=1024)
-
-    except:
-
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", dimensions=1024)
-
-    return embeddings
-
-embeddings = fallback_embeddings()
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large",dimensions=1024)
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
