@@ -202,5 +202,22 @@
     "created_at": "2026-05-13 20:35:27",
     "updated_at": "2026-05-13 20:35:27",
     "resolution_note": null
+  },
+  "FB-AB5CC6": {
+    "ticket_id": "FB-AB5CC6",
+    "session_id": "6381ff2c",
+    "query": "A payment of \u20b92.0 to Raunak (xxx977@paytm) on 23-05-2021 failed due to timeout. Transaction ID: 114302729857.",
+    "complaint_type": "failed_transfer",
+    "priority": "P4",
+    "monetary_impact": "None",
+    "escalation_required": false,
+    "sla_hours": 48,
+    "reason": "Minor transaction failure",
+    "amount": "\u20b92.0",
+    "transaction_date": "23-05-2021",
+    "status": "Open",
+    "created_at": "2026-05-13 22:46:45",
+    "updated_at": "2026-05-13 22:46:45",
+    "resolution_note": null
   }
 }

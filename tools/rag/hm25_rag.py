@@ -14,7 +14,11 @@ from transformers import AutoTokenizer
 
 load_dotenv()
 
-loader = PyPDFLoader("Banking_FAQ_Knowledge_Base.pdf")
+_DIR = os.path.dirname(os.path.abspath(__file__))
+_PDF_PATH = os.path.join(_DIR, "Banking_FAQ_Knowledge_Base.pdf")
+
+loader = PyPDFLoader(_PDF_PATH)
+
 documents = loader.load()
 
 text_splitter = RecursiveCharacterTextSplitter(

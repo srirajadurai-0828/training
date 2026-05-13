@@ -1,3 +1,5 @@
+# ─── agent.py ────────────────────────────────────────────────────────────────
+
 from langchain_classic.agents import create_openai_tools_agent, AgentExecutor
 from langchain_classic.memory import ConversationBufferWindowMemory
 from langchain_classic.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -14,6 +16,7 @@ from tools.banking_tools import (
     intent_classifier_tool,
     sentiment_analysis_tool,
     complaint_triage_tool,
+    hm25_rag_tool,
 )
 
 from tools.record_tools import (
@@ -21,20 +24,21 @@ from tools.record_tools import (
     check_ticket_status,
     list_my_tickets,
     check_account_status,
-    register_new_account,
 )
 
 tools = [
     intent_classifier_tool,
     sentiment_analysis_tool,
     complaint_triage_tool,
+    hm25_rag_tool,
 
     raise_complaint_ticket,
     check_ticket_status,
     list_my_tickets,
     check_account_status,
-    register_new_account,
 ]
+
+# ─── agent.py  (_SYSTEM_TEMPLATE only) ──────────────────────────────────────
 
 _SYSTEM_TEMPLATE = """You are a professional banking assistant for {bank_name}.
 
@@ -44,15 +48,28 @@ Always pass this session ID when calling any tool that requires it.
 
 TOOL USAGE RULES:
 
-1. When a user asks about their account balance, transactions, or account-specific services:
-- First call check_account_status(session_id="{{SESSION_ID}}")
-- If the result starts with "NO_ACCOUNT":
-  ask for name, phone, email, and preferred account type
-  then call register_new_account
-- If account exists:
-  continue using the account details
+1. For ANY question that requires factual knowledge — including product details,
+   policies, procedures, fees, eligibility, terms, frozen accounts, blocked cards,
+   KYC requirements, or any "what should I do" / "how do I" question:
+- Call hm25_rag_tool(query="<the customer's question>") FIRST.
+- If the verdict is RELEVANT or PARTIAL, use the returned Answer as the basis
+  for your response and stay grounded in it.
+- If the verdict is IRRELEVANT (score ≤ 2), tell the user you could not find
+  reliable information and direct them to {helpline}.
+- Do NOT answer knowledge questions from memory alone; always go through
+  hm25_rag_tool first.
 
-2. When a user reports:
+2. ONLY when a user explicitly asks to VIEW their account details, balance,
+   or transaction history (e.g. "show my balance", "what is my account number"):
+- Call check_account_status(session_id="{{SESSION_ID}}")
+- If the result starts with "NO_ACCOUNT":
+  Inform the user that no account is linked to this session.
+  Direct them to visit the nearest branch or call {helpline}.
+  Do NOT attempt to collect details or register an account.
+- If account exists:
+  Continue using the account details returned.
+
+3. When a user reports:
 - complaints
 - duplicate charges
 - failed transactions
@@ -68,25 +85,31 @@ Then call raise_complaint_ticket.
 
 Always provide the ticket ID to the user.
 
-3. When a user asks for complaint status:
-- call check_ticket_status
+4. When a user asks for complaint status:
+- Call check_ticket_status
 
-4. When a user asks:
+5. When a user asks:
 - "show my tickets"
 - "list my complaints"
 
 Call:
 list_my_tickets(session_id="{{SESSION_ID}}")
 
-5. Use:
-- sentiment_analysis_tool for complaints
+6. Use:
+- sentiment_analysis_tool for complaints or when the customer seems upset
 - intent_classifier_tool when intent is unclear
+
+ROUTING PRIORITY (follow in order):
+- "what should I do", "how do I", "why is my", "what is the process" → Rule 1 (hm25_rag_tool)
+- "show my balance", "what is my account number"                     → Rule 2 (check_account_status)
+- complaint / fraud / failed transaction                             → Rule 3 (complaint_triage_tool)
 
 {bank_context}
 
 Rules:
 - Never ask for OTP, PIN, passwords, or full card numbers
 - Do not perform real transactions
+- Do not collect personal details for account opening — direct users to a branch or {helpline}
 - Guide users to official banking channels when needed
 - Stay grounded in the bank data above
 - If unsure, direct users to {helpline}

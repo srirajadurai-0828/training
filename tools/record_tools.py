@@ -1,4 +1,4 @@
-
+# ─── record_tools.py ─────────────────────────────────────────────────────────
 
 import json
 from langchain_core.tools import tool
@@ -6,11 +6,8 @@ from storage.data_store import (
     create_ticket,
     get_ticket,
     get_account_by_session,
-    account_exists,
-    register_account,
     list_tickets_by_session,
 )
-
 
 
 @tool
@@ -159,34 +156,29 @@ def list_my_tickets(session_id: str) -> str:
     return "\n".join(lines)
 
 
-
-
 @tool
 def check_account_status(session_id: str) -> str:
     """
-    Check whether this session has a registered account.
+    Check whether this session has a registered account and return its details.
 
     ALWAYS call this tool first when the user asks about:
     - Their account balance
     - Their account details
     - Any account-specific service
 
-    If no account exists, instruct the user to register first.
-
     Args:
         session_id: The current session ID.
 
     Returns:
-        Account summary if found, or a prompt to register.
+        Account summary if found, or a message that no account is linked.
     """
     account = get_account_by_session(session_id)
 
     if not account:
         return (
-            "NO_ACCOUNT: This session has no registered account. "
-            "Ask the user to provide their name, phone number, email, "
-            "and preferred account type (savings / current / salary) "
-            "so you can register them."
+            "NO_ACCOUNT: No account is linked to this session. "
+            "Please visit your nearest branch or contact the helpline "
+            "to open an account or link an existing one."
         )
 
     return (
@@ -196,58 +188,4 @@ def check_account_status(session_id: str) -> str:
         f"Type:           {account['account_type'].title()}\n"
         f"Status:         {account['status']}\n"
         f"Opened:         {account['opened_at']}"
-    )
-
-
-@tool
-def register_new_account(
-    session_id:   str,
-    name:         str,
-    phone:        str,
-    email:        str,
-    account_type: str = "savings",
-) -> str:
-    """
-    Register a new bank account for the user in the current session.
-
-    Use this ONLY after the user has provided their name, phone, email,
-    and chosen account type. Do not call this without all four details.
-
-    Args:
-        session_id:   The current session ID.
-        name:         Full name of the customer.
-        phone:        Customer's phone number.
-        email:        Customer's email address.
-        account_type: 'savings' | 'current' | 'salary' (default: savings).
-
-    Returns:
-        Confirmation with the new account number and details.
-    """
-    account = register_account(
-        session_id   = session_id,
-        name         = name,
-        phone        = phone,
-        email        = email,
-        account_type = account_type,
-    )
-
-  
-    if account.get("opened_at") and account["name"] != name:
-        return (
-            f"An account already exists for this session.\n"
-            f"Account No: {account['account_number']}\n"
-            f"Name:       {account['name']}"
-        )
-
-    return (
-        f"Account registered successfully!\n"
-        f"Account No:   {account['account_number']}\n"
-        f"Name:         {account['name']}\n"
-        f"Type:         {account['account_type'].title()}\n"
-        f"Phone:        {account['phone']}\n"
-        f"Email:        {account['email']}\n"
-        f"Status:       {account['status']}\n"
-        f"Opened:       {account['opened_at']}\n\n"
-        "Please keep your account number safe. "
-        "You can now access all banking services."
     )

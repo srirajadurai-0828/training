@@ -1,0 +1,96 @@
+[
+    {
+        "timestamp": "2026-05-13T20:51:40.556945",
+        "session_id": "e730adb0",
+        "query": "How can I check my account balance?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 6636.13,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "How can I check my account balance?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "How can I check my account balance?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "How can I check my account balance?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "check_account_status",
+                "output": "NO_ACCOUNT: This session has no registered account. Ask the user to provide their name, phone number, email, and preferred account type (savings / current / salary) so you can register them."
+            }
+        ],
+        "response": "To check your account balance, you'll need to have a registered account with us. It seems like there isn't an account registered for this session yet. Could you please provide the following details to set up your account?\n\n1. Full Name\n2. Phone Number\n3. Email Address\n4. Preferred Account Type (Savings, Current, or Salary)\n\nOnce you provide these details, I'll help you register your account."
+    },
+    {
+        "timestamp": "2026-05-13T20:53:21.959271",
+        "session_id": "e730adb0",
+        "query": "My account has been frozen. What should I do?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 7258.6,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "My account has been frozen. What should I do?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "My account has been frozen. What should I do?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "My account has been frozen. What should I do?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "check_account_status",
+                "output": "NO_ACCOUNT: This session has no registered account. Ask the user to provide their name, phone number, email, and preferred account type (savings / current / salary) so you can register them."
+            }
+        ],
+        "response": "It seems that there is no registered account associated with this session. To assist you further, please provide the following details so we can register your account:\n\n1. Full Name\n2. Phone Number\n3. Email Address\n4. Preferred Account Type (Savings, Current, or Salary)\n\nOnce we have this information, we can proceed with the registration and address the issue of your account being frozen."
+    },
+    {
+        "timestamp": "2026-05-13T20:54:19.497199",
+        "session_id": "e730adb0",
+        "query": "My details are: Raja, 6380106430, raja@gmail.com, Savings",
+        "type": "secure_response",
+        "guardrail": true,
+        "latency_ms": 4336.83,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "My details are: Raja, 6380106430, raja@gmail.com, Savings",
+                "label": "Safe",
+                "confidence": "Medium"
+            },
+            "off_topic_check": {
+                "query": "My details are: Raja, 6380106430, raja@gmail.com, Savings",
+                "label": "Banking",
+                "confidence": "Medium"
+            },
+            "pii_check": {
+                "query": "My details are: Raja, 6380106430, raja@gmail.com, Savings",
+                "label": "Contains PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "I'm sorry, but I can't process personal information. If you have any banking-related questions or need assistance, feel free to ask!"
+    }
+]
