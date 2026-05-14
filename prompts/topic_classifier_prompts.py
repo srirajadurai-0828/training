@@ -3,7 +3,6 @@ from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone, ServerlessSpec
-from langchain_huggingface import HuggingFaceEmbeddings
 
 import os
 from dotenv import load_dotenv

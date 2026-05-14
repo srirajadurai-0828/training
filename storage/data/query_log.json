@@ -791,6 +791,15 @@
       "intent": "agent",
       "type": "agent_response",
       "timestamp": "2026-05-13 22:49:26"
+    },
+    {
+      "id": "3e61a983",
+      "session_id": "32047485",
+      "query": "What documents do I need for a loan?",
+      "response": "For a loan application at Horizon Bank, you will need to submit the following documents:\n\n- KYC documents (such as ID and address proof)\n- Income proof (such as salary slips, Income Tax Returns, or bank statements)\n- Employment details\n\nPlease note that additional documents may be required depending on the type of loan you are applying for. For more specific information, you can contact Horizon Bank at 1800-XXX-XXXX (Toll-free, 24x7).",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 10:12:04"
     }
   ]
 }

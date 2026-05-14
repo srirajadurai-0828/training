@@ -22,3 +22,5 @@ rank_bm25
 pypdf
 presidio_anonymizer 
 presidio_analyzer
+faiss-cpu
+pytesseract

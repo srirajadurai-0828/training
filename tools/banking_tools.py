@@ -7,10 +7,9 @@ from tools.sentiment_analyzer import analyze_sentiment
 from tools.complaint_triage import triage_complaint
 from tools.rag.hm25_rag import hm25_retriever_tool
 
-from llm import agent_llm  # reuse the same LLM already wired in the project
+from llm.llm import agent_llm 
 
 
-# ── LLM-as-Judge: internal helper (not exposed as a tool) ───────────────────
 
 def _llm_judge_rag(query: str, retrieved_context: str) -> dict:
     """

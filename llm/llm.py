@@ -5,7 +5,9 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
 import traceback
 import logging
-import os
+import os, sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), 'utils'))
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger("llm")

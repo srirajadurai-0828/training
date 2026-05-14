@@ -1,3 +1,7 @@
+import os, sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import streamlit as st
 import requests
 import uuid
@@ -35,7 +39,7 @@ if "total_turns" not in st.session_state:
 if "processing" not in st.session_state:
     st.session_state.processing = False
 
-if "ocr_image_key" not in st.session_state:       # ← fix 1: initialize missing key
+if "ocr_image_key" not in st.session_state:       
     st.session_state.ocr_image_key = 0
 
 if "ocr_result" not in st.session_state:

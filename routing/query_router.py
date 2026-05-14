@@ -4,7 +4,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from storage.data_store import log_query
-from llm import conversation_llm_call, llm
+from llm.llm import conversation_llm_call, llm
 from agent.banking_agent import get_banking_agent
 
 from prompts.security_guard_prompts import attack_few_shot_prompt

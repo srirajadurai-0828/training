@@ -32,7 +32,7 @@ from agent.banking_agent import (
     get_banking_agent
 )
 
-from llm import (
+from llm.llm import (
     token_handler,
     MODEL_NAME
 )

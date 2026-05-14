@@ -4,7 +4,7 @@ from langchain_classic.agents import create_openai_tools_agent, AgentExecutor
 from langchain_classic.memory import ConversationBufferWindowMemory
 from langchain_classic.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-from llm import agent_llm
+from llm.llm import agent_llm
 
 from agent.bank_config import (
     get_bank_context,
