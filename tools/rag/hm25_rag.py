@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Document loading & splitting
 # ─────────────────────────────────────────────
 _DIR = os.path.dirname(os.path.abspath(__file__))
-_PDF_PATH = os.path.join(_DIR, "Banking_FAQ_Knowledge_Base.pdf")
+_PDF_PATH = os.path.join(_DIR, "Horizon_Bank_FAQ_Knowledge_Base.pdf")
 
 loader = PyPDFLoader(_PDF_PATH)
 documents = loader.load()

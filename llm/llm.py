@@ -141,14 +141,8 @@ class SafeLLM:
 
 
 class SafeAgentLLM(BaseChatModel):
-    """
-    A proper LangChain BaseChatModel that wraps Anthropic (primary) and
-    OpenAI (fallback) for agentic/tool-calling usage.
-    Extends BaseChatModel so it is a Runnable and works with
-    create_tool_calling_agent's LCEL pipeline (prompt | llm | parser).
-    """
+   
 
-    # Private attributes (not Pydantic fields) — use object.__setattr__
     _anthropic_with_tools: Any = None
     _openai_with_tools: Any = None
 

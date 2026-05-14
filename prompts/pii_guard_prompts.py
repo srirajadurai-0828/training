@@ -1,11 +1,8 @@
 from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
 
-# NOTE: These examples use Presidio-masked tokens (e.g. [PHONE], [CARD_NUMBER]).
-# The redactor runs before this prompt, so the classifier never sees raw PII —
-# it only needs to recognise the presence of masked tokens as PII markers.
 
 pii_examples = [
-    # ── Masked PII tokens — should be flagged ────────────────────────────────
+
     {
         "query": "My account number is [CARD_NUMBER], can you check my balance?",
         "label": "Contains PII",
@@ -57,7 +54,6 @@ pii_examples = [
         "confidence": "High"
     },
 
-    # ── Transaction IDs and reference numbers — should NOT be flagged ─────────
     {
         "query": "Transaction ID 114302729857 failed, raise a complaint",
         "label": "No PII",
@@ -79,7 +75,6 @@ pii_examples = [
         "confidence": "High"
     },
 
-    # ── General banking queries — no PII ──────────────────────────────────────
     {
         "query": "How to open a savings account?",
         "label": "No PII",

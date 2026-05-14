@@ -13,6 +13,7 @@ from prompts.relevance_guard_prompts import off_topic_few_shot_prompt
 from prompts.pii_guard_prompts import pii_few_shot_prompt
 
 from pii.redactor import redact_pii, TOKEN_LABELS, HARD_BLOCK_TOKENS
+from agent.bank_config import get_bank_context
 
 
 class QuerySafety(BaseModel):
@@ -100,7 +101,7 @@ def routing(
                     "content": (
                         "You are a professional banking assistant. "
                         "Greet the customer warmly and briefly. "
-                        "Invite them to share how you can help."
+                        "Invite them to share how you can help." + get_bank_context()
                     ),
                 },
                 {
@@ -119,7 +120,7 @@ def routing(
             "data": response,
         }
 
-    # ── Step 2: Presidio redaction — runs before ALL guardrail checks ─────────
+
     masked_query, found_tokens = redact_pii(query)
 
     detected_pii_labels = [
@@ -127,9 +128,7 @@ def routing(
         if token in TOKEN_LABELS
     ]
 
-    # ── Regex hard-block check (runs on raw query, independent of Presidio) ───
-    # Context-aware patterns: solid numbers only blocked when a keyword is nearby,
-    # so transaction IDs and reference numbers are never false-positived.
+
     import re
     _q = query.lower()
 
@@ -156,12 +155,9 @@ def routing(
     )
     hard_pii_detected = presidio_hard_block or regex_hard_block
 
-    # ── Step 3: remaining guardrails run on masked_query ──────────────────────
+   
     attack_result = is_attack(masked_query)
     off_topic_result = is_off_topic(masked_query)
-
-    # PII detector is now an INFORMER — it confirms masked tokens are present.
-    # It no longer drives the hard block on its own (Presidio already handled that).
     pii_result = is_pii(masked_query)
 
     hard_block = (
@@ -204,11 +200,11 @@ def routing(
             "attack_check": attack_result.model_dump(),
             "off_topic_check": off_topic_result.model_dump(),
             "pii_check": pii_result.model_dump(),
-            "detected_pii": detected_pii_labels,   # ["card number", "Aadhaar number"]
+            "detected_pii": detected_pii_labels,    
             "data": response,
         }
 
-    # ── Step 4: agent gets masked query, logs store masked query ──────────────
+
     agent_response = get_banking_agent(
         session_id
     ).invoke({

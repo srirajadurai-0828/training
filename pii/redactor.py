@@ -1,9 +1,4 @@
-"""
-pii/redactor.py
----------------
-Presidio-based PII redactor with explicit Indian recogniser registration
-and fallback regex for Aadhaar/PAN formats Presidio misses by default.
-"""
+
 import os, sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'utils'))
@@ -12,7 +7,7 @@ from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 
-# ── NLP engine ────────────────────────────────────────────────────────────────
+
 _nlp_engine = NlpEngineProvider(
     nlp_configuration={
         "nlp_engine_name": "spacy",
@@ -20,11 +15,11 @@ _nlp_engine = NlpEngineProvider(
     }
 ).create_engine()
 
-# ── Registry: load defaults + explicitly add Indian recognisers ───────────────
+
 _registry = RecognizerRegistry()
 _registry.load_predefined_recognizers(languages=["en"], nlp_engine=_nlp_engine)
 
-# Aadhaar: 12 digits — solid, spaced (1234 5678 9012), or hyphenated
+
 _registry.add_recognizer(PatternRecognizer(
     supported_entity="IN_AADHAAR",
     patterns=[
@@ -35,7 +30,7 @@ _registry.add_recognizer(PatternRecognizer(
     context=["aadhaar", "aadhar", "uid", "uidai"],
 ))
 
-# PAN: AAAAA9999A (5 letters, 4 digits, 1 letter)
+
 _registry.add_recognizer(PatternRecognizer(
     supported_entity="IN_PAN",
     patterns=[
@@ -44,17 +39,18 @@ _registry.add_recognizer(PatternRecognizer(
     context=["pan", "permanent account"],
 ))
 
-# Indian mobile: 10 digits starting with 6–9, optional +91 prefix
+
 _registry.add_recognizer(PatternRecognizer(
     supported_entity="PHONE_NUMBER",
     patterns=[
         Pattern("IN_MOBILE",         r"(?<!\d)(?:\+91[\s-]?)?[6-9]\d{9}(?!\d)", 0.75),
         Pattern("IN_MOBILE_SPACED",  r"(?<!\d)[6-9]\d{4}\s\d{5}(?!\d)",         0.75),
     ],
-    context=["phone", "mobile", "number", "contact", "call"],
+    context=["phone", "mobile", "contact", "call", "tel", "whatsapp"],
+
 ))
 
-# Card numbers: 13–19 digits with optional spaces/dashes
+
 _registry.add_recognizer(PatternRecognizer(
     supported_entity="CREDIT_CARD",
     patterns=[
@@ -70,13 +66,10 @@ _ENTITIES = [
     "EMAIL_ADDRESS",
     "IBAN_CODE",
     "PERSON",
-    "LOCATION",
     "IN_AADHAAR",
     "IN_PAN",
     "US_SSN",
     "IP_ADDRESS",
-    "URL",
-    "DATE_TIME",
     "NRP",
 ]
 
@@ -88,7 +81,7 @@ _analyzer = AnalyzerEngine(
 
 _anonymizer = AnonymizerEngine()
 
-# ── Replacement tokens ────────────────────────────────────────────────────────
+
 _OPERATORS: dict[str, OperatorConfig] = {
     "CREDIT_CARD":  OperatorConfig("replace", {"new_value": "[CARD_NUMBER]"}),
     "PHONE_NUMBER": OperatorConfig("replace", {"new_value": "[PHONE]"}),
@@ -106,14 +99,12 @@ _OPERATORS: dict[str, OperatorConfig] = {
     "DEFAULT":      OperatorConfig("replace", {"new_value": "[REDACTED]"}),
 }
 
-# Human-readable labels for the frontend
 TOKEN_LABELS: dict[str, str] = {
     "[CARD_NUMBER]": "card number",
     "[PHONE]":       "phone number",
     "[EMAIL]":       "email address",
     "[IBAN]":        "IBAN",
     "[NAME]":        "name",
-    "[LOCATION]":    "location",
     "[AADHAAR]":     "Aadhaar number",
     "[PAN]":         "PAN number",
     "[SSN]":         "SSN",
@@ -124,35 +115,55 @@ TOKEN_LABELS: dict[str, str] = {
     "[REDACTED]":    "sensitive information",
 }
 
-# Tokens that trigger a hard block — these should never reach the agent
+
 HARD_BLOCK_TOKENS = {"[CARD_NUMBER]", "[AADHAAR]", "[PAN]", "[SSN]", "[IBAN]"}
 
 
-def redact_pii(query: str, score_threshold: float = 0.4) -> tuple[str, list[str]]:
-    """
-    Mask PII in `query` using Presidio.
+import re
 
-    Returns:
-        masked_query  — query with PII replaced by tokens e.g. [PHONE]
-        found_tokens  — list of tokens inserted e.g. ["[PHONE]", "[EMAIL]"]
-    """
+def redact_pii(query: str, score_threshold: float = 0.4) -> tuple[str, list[str]]:
+    
+    # Step 1: temporarily replace transaction IDs with placeholders
+    txn_pattern = re.compile(
+        r'(?i)(transaction\s*id|txn\s*id|ref(?:erence)?\s*(?:id|no|number)?)\s*[:\-]?\s*([A-Z0-9\-]{6,20})',
+    )
+    placeholders = {}
+    counter = [0]
+
+    def protect_txn(match):
+        key = f"__TXN_{counter[0]}__"
+        placeholders[key] = match.group(0)
+        counter[0] += 1
+        return key
+
+    protected_query = txn_pattern.sub(protect_txn, query)
+
+    # Step 2: run Presidio on protected query
     results = _analyzer.analyze(
-        text=query,
+        text=protected_query,
         entities=_ENTITIES,
         language="en",
         score_threshold=score_threshold,
     )
 
     if not results:
-        return query, []
+        # Restore placeholders and return
+        restored = protected_query
+        for key, original in placeholders.items():
+            restored = restored.replace(key, original)
+        return restored, []
 
     anonymised = _anonymizer.anonymize(
-        text=query,
+        text=protected_query,
         analyzer_results=results,
         operators=_OPERATORS,
     )
 
     masked = anonymised.text
+
+    # Step 3: restore protected transaction IDs
+    for key, original in placeholders.items():
+        masked = masked.replace(key, original)
 
     found_tokens = [
         token for token in TOKEN_LABELS

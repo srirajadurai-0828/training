@@ -10,7 +10,7 @@ import json
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 
-# pytesseract.pytesseract.tesseract_cmd = r"C:\\Users\\srivi\\Downloads\\Tesseract-OCR\\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\\Users\\srivi\\Downloads\\Tesseract-OCR\\tesseract.exe"
 
 def process_transaction_image(image):
     img = image

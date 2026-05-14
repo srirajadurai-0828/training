@@ -1,7 +1,5 @@
 from agent.bank_config import get_bank_context, BANK_NAME, BANK_HELPLINE, BANK_EMAIL, ESCALATION
 
-# Bank context block — appended to every prompt so the LLM
-# can answer questions about the bank itself in any topic flow.
 _CTX = f"""
 ---
 {get_bank_context()}

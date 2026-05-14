@@ -1,22 +1,4 @@
-"""
-tests/test_chatbot_20_queries.py
-================================
-20-query test suite for the Secure Banking Chatbot.
 
-Coverage
---------
- 1–2   Greeting routing
- 3–4   Attack / jailbreak guardrail
- 5–7   Hard PII block  (Aadhaar, card, PAN)
- 8–9   Soft PII masking  (phone, email — agent still runs, query is masked)
-10–11  Off-topic guardrail
-12–14  RAG knowledge-base lookups
-15–16  Conversation memory (multi-turn)
-17–18  Sentiment escalation + complaint triage
-19–20  Agent tool calls (account status, ticket listing)
-
-Results are written to test_results.json in the same directory as this file.
-"""
 
 import sys
 import os
@@ -24,13 +6,12 @@ import json
 import datetime
 from unittest.mock import patch, MagicMock
 
-# ── Path setup ────────────────────────────────────────────────────────────────
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(PROJECT_ROOT)
 
 from routing.query_router import routing
 
-# ── Result collector ──────────────────────────────────────────────────────────
+#  Result collector 
 RESULTS: list[dict] = []
 RESULTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_results.json")
 
@@ -69,9 +50,9 @@ def _assert(description: str, condition: bool) -> dict:
     return {"description": description, "passed": bool(condition)}
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 1 — GREETING ROUTING  (Tests 1–2)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.conversation_llm_call")
@@ -111,9 +92,9 @@ def test_02_multi_word_greeting(mock_conv, mock_greeting):
     _record(2, "multi_word_greeting", "Greeting routing", "Good morning, can you help me?", response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 2 — ATTACK / JAILBREAK GUARDRAIL  (Tests 3–4)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -180,9 +161,9 @@ def test_04_role_hijack_attack(mock_conv, mock_pii, mock_offtopic, mock_attack, 
     _record(4, "role_hijack_attack", "Attack guardrail", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 3 — HARD PII BLOCK  (Tests 5–7)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -211,10 +192,7 @@ def test_05_hard_block_aadhaar(mock_conv, mock_pii, mock_offtopic, mock_attack, 
     query = "My Aadhaar number is 2345 6789 0123, please verify my KYC"
     response = routing(query=query, session_id="pii_user_1")
 
-    # The router masks the query via Presidio then applies a regex hard-block.
-    # Under mocks the conversation_llm_call mock drives secure_response; we
-    # verify the guardrail fired and sensitive digits are not echoed verbatim
-    # in the public-facing response data string.
+
     response_data_str = str(response.get("data", ""))
     assertions = [
         _assert("guardrail is True (hard block)", response.get("guardrail") is True),
@@ -294,11 +272,9 @@ def test_07_hard_block_pan(mock_conv, mock_pii, mock_offtopic, mock_attack, mock
     _record(7, "hard_block_pan", "Hard PII block (PAN)", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
-#  SECTION 4 — SOFT PII MASKING  (Tests 8–9)
-# Phone/email are masked by Presidio but are NOT hard-block tokens,
-# so the agent still runs — but only sees the masked query.
-# ═════════════════════════════════════════════════════════════════════════════
+
+
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -376,9 +352,9 @@ def test_09_soft_mask_email(mock_agent, mock_pii, mock_offtopic, mock_attack, mo
     _record(9, "soft_mask_email", "Soft PII masking (email)", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 5 — OFF-TOPIC GUARDRAIL  (Tests 10–11)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -446,9 +422,9 @@ def test_11_off_topic_general_knowledge(mock_conv, mock_pii, mock_offtopic, mock
     _record(11, "off_topic_general_knowledge", "Off-topic guardrail", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 6 — RAG KNOWLEDGE BASE  (Tests 12–14)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -569,9 +545,9 @@ def test_14_rag_kyc_documents(mock_agent, mock_pii, mock_offtopic, mock_attack, 
     _record(14, "rag_kyc_documents", "RAG knowledge base", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 7 — CONVERSATION MEMORY  (Tests 15–16)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -660,9 +636,9 @@ def test_16_memory_minimum_balance_followup(mock_agent, mock_pii, mock_offtopic,
             "What about for a current account?", response2, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 8 — SENTIMENT ESCALATION + COMPLAINT TRIAGE  (Tests 17–18)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -766,9 +742,9 @@ def test_18_agent_rag_blocked_card(mock_agent, mock_pii, mock_offtopic, mock_att
     _record(18, "agent_rag_blocked_card", "Agent + RAG", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  SECTION 9 — AGENT TOOL CALLS  (Tests 19–20)
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 @patch("routing.query_router.is_greeting")
 @patch("routing.query_router.is_attack")
@@ -858,9 +834,9 @@ def test_20_agent_list_tickets(mock_agent, mock_pii, mock_offtopic, mock_attack,
     _record(20, "agent_list_tickets", "Agent tool (list_my_tickets)", query, response, assertions)
 
 
-# ═════════════════════════════════════════════════════════════════════════════
+
 #  RUNNER
-# ═════════════════════════════════════════════════════════════════════════════
+
 
 def run_all():
     print("\n" + "═" * 60)
@@ -908,7 +884,7 @@ def run_all():
             })
             print(f"[ERROR] #{test_id:02d} {fn.__name__}: {exc}")
 
-    # ── Summary ───────────────────────────────────────────────────────────────
+
     total  = len(RESULTS)
     passed = sum(1 for r in RESULTS if r["passed"])
     failed = total - passed
@@ -917,7 +893,6 @@ def run_all():
     print(f"  Results: {passed}/{total} passed  |  {failed} failed")
     print("─" * 60)
 
-    # ── Write JSON ────────────────────────────────────────────────────────────
     summary = {
         "run_timestamp": datetime.datetime.utcnow().isoformat() + "Z",
         "total": total,

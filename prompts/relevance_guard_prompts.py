@@ -46,6 +46,16 @@ off_topic_examples = [
         "query": "Bank app is slow, what to do?",
         "label": "Banking",
         "confidence": "Medium"
+    },
+    {
+        "query": "Summarize the chat",
+        "label": "Banking",
+        "confidence": "High"
+    },
+    {
+        "query": "Explain how UPI works",
+        "label": "Banking",
+        "confidence": "High"
     }
 ]
 
