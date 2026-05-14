@@ -1,0 +1,105 @@
+[
+    {
+        "timestamp": "2026-05-14T12:50:05.246768",
+        "session_id": "6db20bc0",
+        "query": "I want to dispute a transaction",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 21186.43,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "I want to dispute a transaction",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "I want to dispute a transaction",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "I want to dispute a transaction",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "complaint_triage_tool",
+                "output": "Priority: P2 | Monetary Impact: Unknown | Escalation Required: True | SLA: 4h | Reason: Transaction dispute may involve unauthorized or incorrect charges and requires prompt review."
+            },
+            {
+                "tool": "raise_complaint_ticket",
+                "output": "Ticket raised successfully.\nTicket ID:    DC-4246EB\nPriority:     P2 — Transaction dispute may involve unauthorized or incorrect charges and requires prompt review.\nStatus:       Open\nSLA:          Resolution expected within 4 hours\nEscalation:   Yes — flagged for human review"
+            }
+        ],
+        "response": "Your dispute has been registered.\n\nTicket ID: DC-4246EB  \nPriority: P2  \nStatus: Open  \nExpected resolution: within 4 hours\n\nIt has been escalated for human review.\n\nIf you want, I can also help you:\n- check the complaint status later, or\n- list all complaints raised in this session."
+    },
+    {
+        "timestamp": "2026-05-14T12:50:39.702734",
+        "session_id": "6db20bc0",
+        "query": "What documents do I need for a loan?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 22313.62,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "hm25_rag_tool",
+                "output": "[RAG Judge] Verdict: PARTIAL | Score: 3/5 | Reason: The context gives document requirements for a personal loan, but not for loans in general.\n\nAnswer: For a personal loan, you need to submit KYC documents, income proof such as salary slips, ITR, or bank statements, and employment details. I could not find reliable information on document requirements for other types of loans in the knowledge base."
+            }
+        ],
+        "response": "For a personal loan, you typically need:\n- KYC documents\n- Income proof, such as salary slips, ITR, or bank statements\n- Employment details\n\nI could not find reliable information in the knowledge base for document requirements for other loan types. For exact requirements, please call 1800-XXX-XXXX (Toll-free, 24x7) or visit the nearest Horizon Bank branch."
+    },
+    {
+        "timestamp": "2026-05-14T12:55:51.220934",
+        "session_id": "6db20bc0",
+        "query": "How do I open a savings account?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 17366.44,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "How do I open a savings account?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "How do I open a savings account?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "How do I open a savings account?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "hm25_rag_tool",
+                "output": "[RAG Judge] Verdict: RELEVANT | Score: 5/5 | Reason: The context directly answers how to open a savings account, including channels, required documents, deposit requirement, and activation timeline.\n\nAnswer: You can open a savings account online through the bank’s website or mobile app, or by visiting any branch. You’ll need valid KYC documents such as your Aadhaar card, PAN card, and a passport-size photograph. A minimum initial deposit may be required depending on the account type. After document verification, the account is typically activated within 1 to 2 business days."
+            }
+        ],
+        "response": "You can open a Horizon Bank savings account:\n- online through the bank website or Horizon Mobile app, or\n- by visiting any branch.\n\nYou’ll generally need:\n- Aadhaar card\n- PAN card\n- passport-size photograph\n- valid KYC documents for verification\n\nA minimum initial deposit may apply depending on the account type. After verification, the account is usually activated within 1–2 business days.\n\nIf you want exact branch guidance, call 1800-XXX-XXXX (Toll-free, 24x7)."
+    }
+]

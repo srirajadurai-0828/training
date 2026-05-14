@@ -1,6 +1,6 @@
 # ─── agent.py ────────────────────────────────────────────────────────────────
 
-from langchain_classic.agents import create_openai_tools_agent, AgentExecutor
+from langchain_classic.agents import create_tool_calling_agent, AgentExecutor
 from langchain_classic.memory import ConversationBufferWindowMemory
 from langchain_classic.prompts import ChatPromptTemplate, MessagesPlaceholder
 
@@ -154,7 +154,7 @@ def get_banking_agent(
             output_key="output",
         )
 
-        agent = create_openai_tools_agent(
+        agent = create_tool_calling_agent(
             llm=agent_llm,
             tools=tools,
             prompt=prompt,

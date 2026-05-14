@@ -1,0 +1,35 @@
+[
+    {
+        "timestamp": "2026-05-14T12:41:55.319983",
+        "session_id": "4c7d192c",
+        "query": "Difference between FD and RD?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 17184.55,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "Difference between FD and RD?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "Difference between FD and RD?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "Difference between FD and RD?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "hm25_rag_tool",
+                "output": "[RAG Judge] Verdict: IRRELEVANT | Score: 1/5 | Reason: The retrieved context does not contain any information about FD (Fixed Deposit) or RD (Recurring Deposit).\n\nAnswer: I could not find reliable information on this in my knowledge base."
+            }
+        ],
+        "response": "I could not find reliable information on this in my knowledge base.\n\nPlease contact Horizon Bank support at 1800-XXX-XXXX (Toll-free, 24x7) for accurate guidance on the difference between Fixed Deposits and Recurring Deposits."
+    }
+]

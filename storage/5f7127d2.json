@@ -1,0 +1,68 @@
+[
+    {
+        "timestamp": "2026-05-14T11:49:12.153156",
+        "session_id": "5f7127d2",
+        "query": "How do I open a savings account?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 19026.46,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "How do I open a savings account?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "How do I open a savings account?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "How do I open a savings account?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "hm25_rag_tool",
+                "output": "[RAG Judge] Verdict: RELEVANT | Score: 5/5 | Reason: The context directly answers how to open a savings account, including channels, required documents, deposit requirement, and activation timeline.\n\nAnswer: You can open a savings account online through the bank’s website or mobile app, or by visiting any branch. You’ll need valid KYC documents such as your Aadhaar card, PAN card, and a passport-size photograph. A minimum initial deposit may be required depending on the account type, and once your documents are verified, the account is typically activated within 1 to 2 business days."
+            }
+        ],
+        "response": "You can open a Horizon Bank savings account either:\n\n- Online via the bank website or Horizon Mobile app, or\n- By visiting any branch\n\nYou’ll generally need:\n\n- Aadhaar card\n- PAN card\n- Passport-size photograph\n- Valid KYC documents for verification\n\nNotes:\n- A minimum initial deposit may be required depending on the account type.\n- After document verification, the account is usually activated within 1–2 business days.\n\nIf you'd like, I can also tell you the minimum balance requirement for Horizon Bank savings accounts."
+    },
+    {
+        "timestamp": "2026-05-14T11:49:40.575074",
+        "session_id": "5f7127d2",
+        "query": "What documents do I need for a loan?",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 16492.78,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "What documents do I need for a loan?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "hm25_rag_tool",
+                "output": "[RAG Judge] Verdict: PARTIAL | Score: 3/5 | Reason: The context gives document requirements for a personal loan, but it does not provide a general loan document list for all loan types.\n\nAnswer: For a personal loan, you need to submit KYC documents, income proof such as salary slips, ITR, or bank statements, and employment details. The context does not specify the required documents for other loan types."
+            }
+        ],
+        "response": "For a personal loan, Horizon Bank requires:\n\n- KYC documents\n- Income proof, such as:\n  - Salary slips\n  - ITR\n  - Bank statements\n- Employment details\n\nI could only find reliable information for personal loans, not all loan types. For home loan or other loan document requirements, please call 1800-XXX-XXXX (Toll-free, 24x7) or visit the nearest branch."
+    }
+]

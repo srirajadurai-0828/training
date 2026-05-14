@@ -1,3 +1,4 @@
+from llm.llm import safe_llm_invoke
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -15,7 +16,7 @@ from langchain_community.vectorstores import FAISS
 
 from langchain_openai import OpenAIEmbeddings
 
-from llm import llm
+from llm.llm import agent_llm
 
 class IntentOutput(BaseModel):
 
@@ -242,6 +243,6 @@ def detect_intent(query: str) -> IntentOutput:
         input=query
     )
 
-    return llm.with_structured_output(
+    return agent_llm.with_structured_output(
         IntentOutput
     ).invoke(final_prompt)

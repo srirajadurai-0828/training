@@ -1,0 +1,22 @@
+[
+    {
+        "timestamp": "2026-05-14T11:10:02.092915",
+        "session_id": "09ce01e9",
+        "query": "hello\n",
+        "type": "greeting",
+        "guardrail": false,
+        "latency_ms": 3393.28,
+        "chain_metadata": {
+            "attack_check": null,
+            "off_topic_check": null,
+            "pii_check": null,
+            "greeting_check": {
+                "query": "hello",
+                "label": "Greeting",
+                "confidence": "High"
+            }
+        },
+        "tool_outputs": [],
+        "response": "Hello! Welcome — how can I help you today?"
+    }
+]

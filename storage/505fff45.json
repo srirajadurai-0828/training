@@ -1,0 +1,43 @@
+[
+    {
+        "timestamp": "2026-05-14T12:16:58.318134",
+        "session_id": "505fff45",
+        "query": "I want to dispute a transaction",
+        "type": "agent_response",
+        "guardrail": false,
+        "latency_ms": 71870.02,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "I want to dispute a transaction",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "I want to dispute a transaction",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "I want to dispute a transaction",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [
+            {
+                "tool": "sentiment_analysis_tool",
+                "output": "Sentiment: neutral | Score: 2/5 | Escalation Required: False"
+            },
+            {
+                "tool": "complaint_triage_tool",
+                "output": "Priority: P2 | Monetary Impact: Medium | Escalation Required: True | SLA: 4h | Reason: Transaction dispute may involve unauthorized or incorrect debit and requires timely investigation"
+            },
+            {
+                "tool": "raise_complaint_ticket",
+                "output": "Ticket raised successfully.\nTicket ID:    DC-38AFDB\nPriority:     P2 — Transaction dispute may involve unauthorized or incorrect debit and requires timely investigation\nStatus:       Open\nSLA:          Resolution expected within 4 hours\nEscalation:   Yes — flagged for human review"
+            }
+        ],
+        "response": "Your dispute has been registered.\n\nTicket ID: DC-38AFDB  \nPriority: P2  \nStatus: Open  \nExpected resolution: within 4 hours\n\nIt has been flagged for human review.\n\nIf you'd like, I can also help you:\n- check the status of this ticket later, or\n- list all your complaint tickets."
+    }
+]

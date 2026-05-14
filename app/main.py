@@ -4,6 +4,7 @@ import logging
 import time
 import datetime
 import json
+import asyncio
 
 from pathlib import Path
 from typing import Optional, Any
@@ -404,11 +405,32 @@ async def chat(
         f"CHAT query={request.query[:80]!r}"
     )
 
+    AGENT_TIMEOUT_SECONDS = 120
+
     try:
 
-        result = routing(
-            query=request.query,
-            session_id=request.session_id
+        result = await asyncio.wait_for(
+            asyncio.to_thread(
+                routing,
+                query=request.query,
+                session_id=request.session_id,
+            ),
+            timeout=AGENT_TIMEOUT_SECONDS,
+        )
+
+    except asyncio.TimeoutError:
+
+        logger.error(
+            f"[{request.session_id}] "
+            f"routing timed out after {AGENT_TIMEOUT_SECONDS}s"
+        )
+
+        raise HTTPException(
+            status_code=504,
+            detail=(
+                "The request took too long to process. "
+                "Please try again or simplify your query."
+            ),
         )
 
     except Exception as exc:

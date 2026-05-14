@@ -7,7 +7,7 @@ from langchain_core.prompts import (
     PromptTemplate
 )
 
-from llm import llm
+from llm.llm import agent_llm
 
 class ComplaintOutput(BaseModel):
 
@@ -113,7 +113,7 @@ def triage_complaint(query: str):
         input=query
     )
 
-    chain = llm.with_structured_output(
+    chain = agent_llm.with_structured_output(
         ComplaintOutput
     )
 
