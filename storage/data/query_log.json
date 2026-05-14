@@ -908,6 +908,15 @@
       "intent": "agent",
       "type": "agent_response",
       "timestamp": "2026-05-14 13:28:08"
+    },
+    {
+      "id": "60a7fd62",
+      "session_id": "c03e964f",
+      "query": " How do I close my bank account?\n",
+      "response": "To close your Horizon Bank account, please visit your home branch and submit an account closure request form.\n\nYou should carry:\n- Passbook\n- Unused cheque leaves\n- Debit card\n\nBefore closing the account, ensure:\n- All dues are cleared\n- No active auto-debits are linked\n- No EMIs or standing instructions are active\n\nImportant:\n- If the account is less than 12 months old, a closure fee may apply\n- Any remaining balance can be returned by cheque or transferred to another account as per your request\n\nIf you want, I can also help with what to check before visiting the branch.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 15:04:55"
     }
   ]
 }
