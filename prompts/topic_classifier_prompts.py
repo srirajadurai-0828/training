@@ -8,6 +8,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+PINECONE_TOPIC_INDEX_NAME = os.getenv("PINECONE_TOPIC_INDEX_NAME")
+
 topic_data = [
 
 # ================== Account Management ==================
@@ -143,7 +145,7 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-large",dimensions=1024)
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
-index_name = "banking-guardrails"
+index_name = PINECONE_TOPIC_INDEX_NAME
 
 if index_name not in pc.list_indexes().names():
     pc.create_index(

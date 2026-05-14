@@ -45,7 +45,7 @@ embeddings = OpenAIEmbeddings(
 )
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-index_name = "horizon-bank-faq"
+index_name = os.getenv("PINECONE_RAG_INDEX_NAME")
 
 if index_name not in pc.list_indexes().names():
     pc.create_index(
