@@ -1,37 +1,63 @@
 from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
 
+# NOTE: These examples use Presidio-masked tokens (e.g. [PHONE], [CARD_NUMBER]).
+# The redactor runs before this prompt, so the classifier never sees raw PII —
+# it only needs to recognise the presence of masked tokens as PII markers.
+
 pii_examples = [
+    # ── Masked PII tokens — should be flagged ────────────────────────────────
     {
-        "query": "My account number is 1234567890, can you check my balance?",
+        "query": "My account number is [CARD_NUMBER], can you check my balance?",
         "label": "Contains PII",
         "confidence": "High"
     },
     {
-        "query": "Here is my phone number 9876543210, update my account",
+        "query": "Here is my phone number [PHONE], update my account",
         "label": "Contains PII",
         "confidence": "High"
     },
     {
-        "query": "My email is raja@gmail.com, please link it",
+        "query": "My email is [EMAIL], please link it",
         "label": "Contains PII",
         "confidence": "High"
     },
     {
-        "query": "My Aadhaar number is 1234 5678 9012",
+        "query": "My Aadhaar number is [AADHAAR]",
         "label": "Contains PII",
         "confidence": "High"
     },
     {
-        "query": "My PAN is ABCDE1234F",
+        "query": "My PAN is [PAN]",
         "label": "Contains PII",
         "confidence": "High"
     },
     {
-        "query": "My PIN is 4321, reset it",
+        "query": "My PIN is [PIN_OTP], reset it",
         "label": "Contains PII",
         "confidence": "High"
     },
-    # ── Transaction ID examples — should NOT be flagged ──
+    {
+        "query": "Please contact [NAME] at [EMAIL] regarding my account",
+        "label": "Contains PII",
+        "confidence": "High"
+    },
+    {
+        "query": "I live at [LOCATION], please update my address",
+        "label": "Contains PII",
+        "confidence": "High"
+    },
+    {
+        "query": "My IBAN is [IBAN] for the transfer",
+        "label": "Contains PII",
+        "confidence": "High"
+    },
+    {
+        "query": "Call me at [PHONE] after resolving this",
+        "label": "Contains PII",
+        "confidence": "High"
+    },
+
+    # ── Transaction IDs and reference numbers — should NOT be flagged ─────────
     {
         "query": "Transaction ID 114302729857 failed, raise a complaint",
         "label": "No PII",
@@ -43,16 +69,17 @@ pii_examples = [
         "confidence": "High"
     },
     {
-        "query": "Transaction 4028312 to xxx977@paytm failed on 23-05-2021",
+        "query": "Transaction 4028312 to xxx977@paytm failed on [DATE]",
         "label": "No PII",
         "confidence": "High"
     },
     {
-        "query": "A payment of ₹2.0 to Raunak on 23-05-2021 failed. Transaction ID: 114302729857.",
+        "query": "A payment of ₹2.0 to Raunak on [DATE] failed. Transaction ID: 114302729857.",
         "label": "No PII",
         "confidence": "High"
     },
-    # ── General queries ──
+
+    # ── General banking queries — no PII ──────────────────────────────────────
     {
         "query": "How to open a savings account?",
         "label": "No PII",
@@ -69,10 +96,15 @@ pii_examples = [
         "confidence": "High"
     },
     {
-        "query": "I think my number is something like 12345, not sure",
-        "label": "Contains PII",
-        "confidence": "Low"
-    }
+        "query": "I want to dispute a transaction",
+        "label": "No PII",
+        "confidence": "High"
+    },
+    {
+        "query": "What documents do I need for a home loan?",
+        "label": "No PII",
+        "confidence": "High"
+    },
 ]
 
 pii_example_prompt = PromptTemplate.from_template(
@@ -85,18 +117,21 @@ pii_few_shot_prompt = FewShotPromptTemplate(
     prefix=(
         "You are a PII (Personally Identifiable Information) detection classifier "
         "for a banking assistant.\n"
-        "Your task is to identify whether the user query contains any sensitive personal data "
-        "that should not be processed directly.\n\n"
-        "Label as 'Contains PII' if the query includes:\n"
-        "- Bank account numbers or card numbers\n"
-        "- Phone numbers or email addresses\n"
-        "- Aadhaar numbers, PAN numbers\n"
-        "- Passwords, PINs, OTPs, or CVV codes\n\n"
+        "Queries have already been pre-processed by a PII redactor. Sensitive values "
+        "have been replaced with tokens like [PHONE], [EMAIL], [CARD_NUMBER], [AADHAAR], "
+        "[PAN], [NAME], [LOCATION], [IBAN], [DATE], [REDACTED].\n\n"
+        "Your task: detect whether the query contains any of these masked PII tokens.\n\n"
+        "Label as 'Contains PII' if the query includes any masked token such as:\n"
+        "- [CARD_NUMBER] or [IBAN] — bank or card identifiers\n"
+        "- [PHONE] or [EMAIL] — contact details\n"
+        "- [AADHAAR], [PAN], [SSN] — government IDs\n"
+        "- [NAME] or [LOCATION] — personal identifiers\n"
+        "- [REDACTED] — any other masked sensitive value\n\n"
         "Label as 'No PII' if the query contains:\n"
-        "- General banking questions with no personal data\n"
-        "- Transaction IDs or payment reference numbers (these are NOT PII)\n"
+        "- General banking questions with no masked tokens\n"
+        "- Transaction IDs or payment reference numbers (raw numbers are NOT PII)\n"
         "- UPI IDs used in a transaction context (e.g. xxx@paytm)\n"
-        "- Amounts, dates, or merchant names related to a transaction\n\n"
+        "- Amounts, merchant names, or [DATE] tokens alone (dates are not PII in transaction context)\n\n"
         "Examples:"
     ),
     suffix="\nNow classify this:\nQuery: {input}\nLabel:",

@@ -1,0 +1,58 @@
+[
+    {
+        "timestamp": "2026-05-14T16:47:51.897386",
+        "session_id": "9e78d353",
+        "query": "My Aadhaar is 1234 5678 9012, can you verify my KYC?\n",
+        "type": "secure_response",
+        "guardrail": true,
+        "latency_ms": 9827.36,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "My Aadhaar is 1234 5678 9012, can you verify my KYC?",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "My Aadhaar is 1234 5678 9012, can you verify my KYC?",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "My Aadhaar is 1234 5678 9012, can you verify my KYC?",
+                "label": "No PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "I can’t process or verify KYC using your Aadhaar number here.\n\nFor your security, please do not share sensitive IDs in chat. Use only your bank’s official app, website, branch, or customer care to complete KYC.\n\nIf you want, I can help with safe next steps, such as:\n- How to check KYC status in your bank app\n- What documents are usually required\n- How to contact official support securely"
+    },
+    {
+        "timestamp": "2026-05-14T16:48:52.262539",
+        "session_id": "9e78d353",
+        "query": "My card number is 9876 5432 1234 5678. it got blocked can you unblock it\n",
+        "type": "secure_response",
+        "guardrail": true,
+        "latency_ms": 13134.76,
+        "chain_metadata": {
+            "attack_check": {
+                "query": "My card number is [CARD_NUMBER]. it got blocked can you unblock it",
+                "label": "Safe",
+                "confidence": "High"
+            },
+            "off_topic_check": {
+                "query": "My card number is [CARD_NUMBER]. it got blocked can you unblock it",
+                "label": "Banking",
+                "confidence": "High"
+            },
+            "pii_check": {
+                "query": "My card number is [CARD_NUMBER]. it got blocked can you unblock it",
+                "label": "Contains PII",
+                "confidence": "High"
+            },
+            "greeting_check": null
+        },
+        "tool_outputs": [],
+        "response": "I can help with next steps, but I can’t unblock a card directly here.\n\nPlease do one of these:\n- Use your banking app and check **Cards > Card controls / Unblock**\n- Call the number on the back of your card or the bank’s official support line\n- If it was blocked for suspected fraud, ask for **card verification** or a **replacement card**\n\nFor your security, please **don’t share your full card number** in chat. If you want, I can help you find the safest next step based on why it was blocked."
+    }
+]

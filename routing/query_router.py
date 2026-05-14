@@ -12,6 +12,8 @@ from prompts.greeting_classifier_prompts import greeting_few_shot_prompt
 from prompts.relevance_guard_prompts import off_topic_few_shot_prompt
 from prompts.pii_guard_prompts import pii_few_shot_prompt
 
+from pii.redactor import redact_pii, TOKEN_LABELS, HARD_BLOCK_TOKENS
+
 
 class QuerySafety(BaseModel):
     query: str
@@ -86,6 +88,7 @@ def routing(
     session_id: str = "default"
 ) -> dict:
 
+    # ── Step 1: greeting check on raw query ───────────────────────────────────
     greeting_result = is_greeting(query)
 
     if greeting_result.label == "Greeting":
@@ -116,15 +119,54 @@ def routing(
             "data": response,
         }
 
-    attack_result = is_attack(query)
+    # ── Step 2: Presidio redaction — runs before ALL guardrail checks ─────────
+    masked_query, found_tokens = redact_pii(query)
 
-    off_topic_result = is_off_topic(query)
+    detected_pii_labels = [
+        TOKEN_LABELS[token] for token in found_tokens
+        if token in TOKEN_LABELS
+    ]
 
-    pii_result = is_pii(query)
+    # ── Regex hard-block check (runs on raw query, independent of Presidio) ───
+    # Context-aware patterns: solid numbers only blocked when a keyword is nearby,
+    # so transaction IDs and reference numbers are never false-positived.
+    import re
+    _q = query.lower()
+
+    _card_spaced   = re.compile(r'(?<![0-9])[0-9]{4}[ -][0-9]{4}[ -][0-9]{4}[ -][0-9]{4}(?![0-9])')
+    _card_solid    = re.compile(r'(?<![0-9])[0-9]{16}(?![0-9])')
+    _aadhaar_spaced= re.compile(r'(?<![0-9])[0-9]{4}[ -][0-9]{4}[ -][0-9]{4}(?![0-9])')
+    _aadhaar_solid = re.compile(r'(?<![0-9])[0-9]{12}(?![0-9])')
+    _pan           = re.compile(r'[A-Z]{5}[0-9]{4}[A-Z]')
+
+    _card_kw    = ['card', 'credit', 'debit', 'visa', 'mastercard', 'rupay']
+    _aadhaar_kw = ['aadhaar', 'aadhar', 'uid']
+    _pan_kw     = ['pan', 'permanent account']
+
+    regex_hard_block = (
+        bool(_card_spaced.search(query))
+        or (bool(_card_solid.search(query))    and any(k in _q for k in _card_kw))
+        or (bool(_aadhaar_spaced.search(query))and not _card_spaced.search(query))
+        or (bool(_aadhaar_solid.search(query)) and any(k in _q for k in _aadhaar_kw))
+        or (bool(_pan.search(query))           and any(k in _q for k in _pan_kw))
+    )
+
+    presidio_hard_block = any(
+        t in found_tokens for t in {"[CARD_NUMBER]", "[AADHAAR]", "[PAN]", "[SSN]", "[IBAN]"}
+    )
+    hard_pii_detected = presidio_hard_block or regex_hard_block
+
+    # ── Step 3: remaining guardrails run on masked_query ──────────────────────
+    attack_result = is_attack(masked_query)
+    off_topic_result = is_off_topic(masked_query)
+
+    # PII detector is now an INFORMER — it confirms masked tokens are present.
+    # It no longer drives the hard block on its own (Presidio already handled that).
+    pii_result = is_pii(masked_query)
 
     hard_block = (
-        attack_result.label == "Attack"
-        or pii_result.label == "Contains PII"
+        hard_pii_detected
+        or attack_result.label == "Attack"
         or (
             off_topic_result.label == "Off-Topic"
             and off_topic_result.confidence == "High"
@@ -149,26 +191,28 @@ def routing(
                 },
                 {
                     "role": "user",
-                    "content": query
+                    "content": masked_query
                 },
             ],
             session_id=session_id,
         )
 
         return {
-            "query": query,
+            "query": masked_query,
             "type": "secure_response",
             "guardrail": True,
             "attack_check": attack_result.model_dump(),
             "off_topic_check": off_topic_result.model_dump(),
             "pii_check": pii_result.model_dump(),
+            "detected_pii": detected_pii_labels,   # ["card number", "Aadhaar number"]
             "data": response,
         }
 
+    # ── Step 4: agent gets masked query, logs store masked query ──────────────
     agent_response = get_banking_agent(
         session_id
     ).invoke({
-        "input": query
+        "input": masked_query
     })
 
     response_text = (
@@ -179,18 +223,19 @@ def routing(
 
     log_query(
         session_id=session_id,
-        query=query,
+        query=masked_query,
         response=response_text,
         intent="agent",
         query_type="agent_response",
     )
 
     return {
-        "query": query,
+        "query": masked_query,
         "type": "agent_response",
         "guardrail": False,
         "attack_check": attack_result.model_dump(),
         "off_topic_check": off_topic_result.model_dump(),
         "pii_check": pii_result.model_dump(),
+        "detected_pii": detected_pii_labels,        # ["phone number", "email address"]
         "data": agent_response,
     }
