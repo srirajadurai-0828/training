@@ -989,6 +989,123 @@
       "intent": "agent",
       "type": "agent_response",
       "timestamp": "2026-05-14 16:51:30"
+    },
+    {
+      "id": "124a1f6b",
+      "session_id": "soft_pii_user_1",
+      "query": "Call me at [PHONE] to reset my PIN",
+      "response": "To reset your PIN, please visit the nearest branch or use our app.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "68fc91e2",
+      "session_id": "soft_pii_user_2",
+      "query": "Reach me at [EMAIL] for account help",
+      "response": "Your email has been updated in our records.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "91cd42b8",
+      "session_id": "rag_user_1",
+      "query": "What is the interest rate on savings accounts?",
+      "response": "[RAG Judge] Verdict: RELEVANT | Score: 5/5\n\nAnswer: The savings account interest rate is 4% per annum.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "062da714",
+      "session_id": "rag_user_2",
+      "query": "How do I apply for a home loan?",
+      "response": "[RAG Judge] Verdict: RELEVANT | Score: 4/5\n\nAnswer: To apply for a home loan visit any branch with income proof and ID.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "ac1e5f48",
+      "session_id": "rag_user_3",
+      "query": "What are the KYC documents required to open an account?",
+      "response": "[RAG Judge] Verdict: RELEVANT | Score: 5/5\n\nAnswer: KYC requires Aadhaar, PAN, and passport-size photos.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "ca52c0e7",
+      "session_id": "mem_user_1",
+      "query": "Tell me about personal loans and home loans",
+      "response": "Here is information about personal loans and home loans from our knowledge base.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "8a0146e6",
+      "session_id": "mem_user_1",
+      "query": "Which loans did I ask about?",
+      "response": "You asked about personal loan and home loan in the previous message.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "8d09130c",
+      "session_id": "mem_user_2",
+      "query": "What is the minimum balance for a savings account?",
+      "response": "The minimum balance for a savings account is \u20b91,000.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "e3fe3f3d",
+      "session_id": "mem_user_2",
+      "query": "What about for a current account?",
+      "response": "For a current account, the minimum balance required is \u20b910,000.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "5a585ceb",
+      "session_id": "sentiment_user_1",
+      "query": "I was charged twice for the same transaction and I am very frustrated!",
+      "response": "Sentiment: angry | Score: 4/5 | Escalation Required: True\nPriority: P2 | Monetary Impact: Medium | SLA: 4h\nComplaint escalated. Ticket ID: TKT-2024-001",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "89ce80f1",
+      "session_id": "rag_agent_user_1",
+      "query": "My debit card was blocked and I don't know why",
+      "response": "[RAG Judge] Verdict: RELEVANT | Score: 4/5\n\nAnswer: Cards can be blocked due to suspicious activity or too many incorrect PIN attempts. Please call our helpline or visit the nearest branch to unblock.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "188d5587",
+      "session_id": "account_user_1",
+      "query": "Show my account balance",
+      "response": "Your account balance is \u20b945,230.00. Account type: Savings. Status: Active.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
+    },
+    {
+      "id": "49d0d8b5",
+      "session_id": "ticket_user_1",
+      "query": "List my complaint tickets",
+      "response": "Here are your open tickets:\n1. TKT-2024-001 | Duplicate charge | Status: Open | Priority: P2\n2. TKT-2024-002 | Card blocked | Status: Resolved | Priority: P3",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 17:15:31"
     }
   ]
 }
