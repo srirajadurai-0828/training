@@ -332,6 +332,12 @@ if st.session_state.get("ocr_result") and st.session_state.ocr_result.get("valid
 user_input = st.chat_input("Type your banking query...")
 prompt = (user_input + "\n" + ocr_injected) if user_input else None
 
+# Clear OCR result after it has been consumed into a prompt so it doesn't
+# keep appending to every subsequent message.
+if user_input and ocr_injected:
+    st.session_state.ocr_result = None
+    st.session_state.ocr_image_key += 1  # resets the file uploader widget
+
 if injected:
     prompt = injected
 

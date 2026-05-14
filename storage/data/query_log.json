@@ -899,6 +899,15 @@
       "intent": "agent",
       "type": "agent_response",
       "timestamp": "2026-05-14 13:11:12"
+    },
+    {
+      "id": "0c364046",
+      "session_id": "34b51303",
+      "query": "I want to dispute a transaction",
+      "response": "Your dispute has been registered successfully.\n\nTicket ID: DC-7070C2  \nPriority: P2  \nStatus: Open  \nExpected resolution time: within 4 hours\n\nIt has been flagged for human review.\n\nIf you'd like, I can also help you:\n- check the status of this ticket later, or\n- list all complaints raised in this session.",
+      "intent": "agent",
+      "type": "agent_response",
+      "timestamp": "2026-05-14 13:28:08"
     }
   ]
 }

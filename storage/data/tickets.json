@@ -304,5 +304,22 @@
     "created_at": "2026-05-14 13:11:08",
     "updated_at": "2026-05-14 13:11:08",
     "resolution_note": null
+  },
+  "DC-7070C2": {
+    "ticket_id": "DC-7070C2",
+    "session_id": "34b51303",
+    "query": "I want to dispute a transaction",
+    "complaint_type": "transaction_dispute",
+    "priority": "P2",
+    "monetary_impact": "Medium",
+    "escalation_required": true,
+    "sla_hours": 4,
+    "reason": "Transaction dispute may involve unauthorized or incorrect debit and requires timely investigation",
+    "amount": null,
+    "transaction_date": null,
+    "status": "Open",
+    "created_at": "2026-05-14 13:28:06",
+    "updated_at": "2026-05-14 13:28:06",
+    "resolution_note": null
   }
 }
