@@ -1,0 +1,19 @@
+{
+  "DC-F74319": {
+    "ticket_id": "DC-F74319",
+    "session_id": "fed4544c",
+    "query": "Need to raise a complaint for a transaction failure.\nThe Image validator has already validated this transaction as valid. Use the summary below to register complaint:\n\nA payment of Rupees Two Thousand Only to Lohchab Motor Company Pvt Ltd (lohchab[PHONE]@sbi) on 07-10-2024 failed. Transaction ID: 428148054740.",
+    "complaint_type": "failed_transfer",
+    "priority": "P2",
+    "monetary_impact": "Medium",
+    "escalation_required": true,
+    "sla_hours": 4,
+    "reason": "Transaction failure involving a completed payment attempt with monetary impact; requires prompt investigation and resolution.",
+    "amount": "\u20b92,000",
+    "transaction_date": "07-10-2024",
+    "status": "Open",
+    "created_at": "2026-05-16 19:43:38",
+    "updated_at": "2026-05-16 19:43:38",
+    "resolution_note": null
+  }
+}
